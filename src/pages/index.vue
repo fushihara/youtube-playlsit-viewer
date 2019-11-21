@@ -16,14 +16,14 @@
       <label>
         <input v-model="enableUserGroup" type="checkbox" />チャンネルでグループ分けする
       </label>
-      <button v-on:click="changeSort('number-up')">↑番号順</button>
-      <button v-on:click="changeSort('number-down')">↓番号順</button>
-      <button v-on:click="changeSort('live-start-up')">↑ライブ配信開始時刻</button>
-      <button v-on:click="changeSort('live-start-down')">↓ライブ配信開始時刻</button>
-      <button v-on:click="changeSort('post-up')">↑動画投稿時刻</button>
-      <button v-on:click="changeSort('post-down')">↓動画投稿時刻</button>
-      <button v-on:click="changeSort('pv-up')">↑再生数</button>
-      <button v-on:click="changeSort('pv-down')">↓再生数</button>
+      <button v-on:click="changeSort('number-up')">昔に登録した動画順</button>
+      <button v-on:click="changeSort('number-down')">最近登録した動画順</button>
+      <button v-on:click="changeSort('live-start-up')">昔にライブ配信開始時刻</button>
+      <button v-on:click="changeSort('live-start-down')">最近ライブ配信開始時刻</button>
+      <button v-on:click="changeSort('post-up')">昔に動画投稿時刻</button>
+      <button v-on:click="changeSort('post-down')">最近動画投稿時刻</button>
+      <button v-on:click="changeSort('pv-up')">再生数多い順</button>
+      <button v-on:click="changeSort('pv-down')">再生数少ない順</button>
     </div>
     <div v-if="enableUserGroup==false" class="videoList-solid">
       <video-element v-for="data in videoItemsSolid" v-bind:key="data.videoId" v-bind:data="data"></video-element>
