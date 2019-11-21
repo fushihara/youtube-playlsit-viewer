@@ -13,6 +13,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
+    "@nuxt/types": "^0.3.4",
     "@nuxt/typescript-build": "^0.3.2",
     "@nuxt/typescript-runtime": "^0.2.2",
     "@nuxtjs/axios": "^5.8.0",
