@@ -59,7 +59,18 @@ type LiveStreamingEnded = { // 配信終了
   actualStartTime: Date,
   actualEndTime: Date
 };
-
+export async function getPlayList(axios: any): Promise<{ id: string, title: string, itemCount: number }[]> {
+  const url = "https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&mine=true&maxResults=50";
+  return axios.$get(url).then((a: any) => {
+    return a.items.map((b: any) => {
+      return {
+        id: String(b.id),
+        title: String(b.snippet.title),
+        itemCount: Number(b.contentDetails.itemCount)
+      };
+    });
+  });
+}
 export async function getPlaylistVideos(axios: any, playlistId: string, allGet: boolean): Promise<{ datas: VideoDataAndPlaylist[] }> {
   const filterVideoIds: string[] = [];
   const resultData: VideoDataAndPlaylist[] = [];

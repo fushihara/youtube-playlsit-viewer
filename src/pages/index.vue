@@ -46,8 +46,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import VideoElement from "../components/video.vue";
-import { getPlaylistVideos, VideoDataAndPlaylist } from "../util/youtubeApi";
+import { getPlayList, getPlaylistVideos, VideoDataAndPlaylist } from "../util/youtubeApi";
 import { formatDate, formatNumber, formatSecond } from "../util/stringUtil";
 
 export default Vue.extend({
@@ -89,17 +88,10 @@ export default Vue.extend({
       this.applySort();
     },
     updatePlaylistList(): void {
-      const url = "https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&mine=true&maxResults=50";
       //@ts-ignore
-      this.$axios.$get(url).then(a => {
-        this.playlistList = a.items.map((b: any) => {
-          return {
-            id: String(b.id),
-            title: String(b.snippet.title),
-            itemCount: Number(b.contentDetails.itemCount)
-          };
-        });
-        this.activePlaylist = this.playlistList[0];
+      getPlayList(this.$axios).then(result => {
+        this.playlistList = result;
+        this.activePlaylist = result[0];
       });
     },
     applySort(): void {
