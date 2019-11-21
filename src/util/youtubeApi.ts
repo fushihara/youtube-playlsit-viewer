@@ -1,5 +1,76 @@
 import { LocalStorageUtil } from "./localStorageUtil";
-import { strict } from "assert";
+import { formatDate } from "./stringUtil";
+export function applySort(videoItemsRaw:VideoDataAndPlaylist[],sortType:SortType):VideoDataAndPlaylist[]{
+  const sortData = videoItemsRaw.map(a => {
+    let sortValueNum: number | null = null;
+    let sortName = "";
+    switch (sortType) {
+      case "number-up":
+      case "number-down":
+        sortValueNum = a.playlistPosition;
+        sortValueNum = a.playlistPosition;
+        sortName = "お気に入り登録";
+        break;
+      case "live-start-up":
+      case "live-start-down":
+        if (a.liveStreaming && (a.liveStreaming.type == "now" || a.liveStreaming.type == "ended")) {
+          sortValueNum = new Date(a.liveStreaming.actualStartTime).getTime();
+          sortName = "配信開始";
+        }
+        break;
+      case "pv-up":
+      case "pv-down":
+        if (a.liveStreaming == null || a.liveStreaming.type == "ended") {
+          sortValueNum = a.viewCount;
+          sortName = "PV";
+        }
+        break;
+      case "post-up":
+      case "post-down":
+        sortValueNum = new Date(a.publishDate).getTime();
+        sortName = "動画投稿";
+        break;
+    }
+    return {
+      ...a,
+      sortValue: formatDate(a.playlistRegistrationDate),
+      sortValueNum,
+      sortName
+    }
+  }).filter(a => {
+    return a.sortValueNum !== null;
+  }).sort((a, b) => {
+    let rev = false;
+    switch (sortType) {
+      case "number-up":
+        rev = true;
+        break;
+      case "number-down":
+        rev = false;
+        break;
+      case "live-start-up":
+        rev = true;
+        break;
+      case "live-start-down":
+        rev = false;
+        break;
+      case "post-up":
+        rev = true;
+        break;
+      case "post-down":
+        rev = false;
+        break;
+    }
+    if (a.sortValueNum === null) { return 0; }
+    if (b.sortValueNum === null) { return 0; }
+    if (rev) {
+      return a.sortValueNum - b.sortValueNum;
+    } else {
+      return b.sortValueNum - a.sortValueNum;
+    }
+  });
+  return sortData;
+}
 export function updateToken() {
   const saveData = LocalStorageUtil.load();
   const postValues = [];
