@@ -34,7 +34,9 @@
 <script lang="ts">
 import Vue from "vue";
 import VideoElement from "../components/listItem/videoCompact.vue";
-import { getPlayList, getPlaylistVideos, VideoDataAndPlaylist, applySort } from "../util/youtubeApi";
+import { getPlayList, getPlaylistVideos, VideoDataAndPlaylist } from "../util/youtubeApi";
+import { applySort } from "../util/youtubeApiSort";
+
 import { formatDate, formatNumber, formatSecond } from "../util/stringUtil";
 
 export default Vue.extend({
@@ -82,7 +84,7 @@ export default Vue.extend({
       });
     },
     applySort(): void {
-      this.videoItemsSolid = applySort(this.videoItemsRaw, this.sortType,this.enableUserGroup);
+      this.videoItemsSolid = applySort(this.videoItemsRaw, this.sortType, this.enableUserGroup);
     },
     getVideoList(allGet: boolean): void {
       const targetPlaylistId = this.activePlaylist!.id;
