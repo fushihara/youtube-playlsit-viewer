@@ -25,27 +25,15 @@
       <button v-on:click="changeSort('pv-up')">再生数多い順</button>
       <button v-on:click="changeSort('pv-down')">再生数少ない順</button>
     </div>
-    <div v-if="enableUserGroup==false" class="videoList-solid">
+    <div class="videoList-solid" v-on:wheel="listWheelEvent">
       <video-element v-for="data in videoItemsSolid" v-bind:key="data.videoId" v-bind:data="data"></video-element>
-    </div>
-    <div v-if="enableUserGroup==true" class="videoList-group">
-      <div v-for="data in videoItemsGraup" v-bind:key="data.channelId">
-        <a v-bind:href="'https://www.youtube.com/'+data.channelId+'/videos'">{{data.channelTitle}}</a>
-        <div style="padding-left:20px;">
-          <video-element
-            v-for="videoData in data.videos"
-            v-bind:key="videoData.videoId"
-            v-bind:data="videoData"
-            style="background-color:white;"
-          ></video-element>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import VideoElement from "../components/listItem/videoCompact.vue";
 import { getPlayList, getPlaylistVideos, VideoDataAndPlaylist, applySort } from "../util/youtubeApi";
 import { formatDate, formatNumber, formatSecond } from "../util/stringUtil";
 
@@ -71,18 +59,18 @@ export default Vue.extend({
     });
     return {};
   },
-  computed: {
-    compValue(): string { return "" }
-  },
   watch: {
-    activePlaylist: function (newValue: any) {
-      console.log(`newvalue`, newValue);
-    },
-    sortType: function (newValue) {
+    enableUserGroup: function (newValue) {
+      this.applySort();
     }
   },
   methods: {
-    changeSort(type: "number-up" | "number-down" | "live-start-up" | "live-start-down" | "post-up" | "post-down" | "pv-up" | "pv-down") {
+    listWheelEvent(event: WheelEvent) {
+      const el = this.$el.querySelector<HTMLLIElement>(".videoList-solid")!;
+      el.scrollLeft += event.deltaY / 2;
+      event.preventDefault();
+    },
+    changeSort(type: SortType) {
       this.sortType = type;
       this.applySort();
     },
@@ -122,18 +110,13 @@ export default Vue.extend({
   border: solid 1px black;
   flex: 1 1 0;
 }
-.videoList-group > * {
-  &:first-child {
-    border-top: 2px solid black;
-  }
-  border-bottom: 2px solid black;
+.videoList-solid {
   display: flex;
   flex-direction: column;
-  > a {
-    background-color: lightgray;
-  }
-  > div {
-    background-color: lightgray;
+  flex-wrap: wrap;
+  > * {
+    width: 322px;
+    flex: 0 0 auto;
   }
 }
 </style>

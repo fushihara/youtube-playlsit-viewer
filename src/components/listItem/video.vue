@@ -53,8 +53,8 @@
 <script lang="ts">
 
 import Vue, { PropType } from "vue";
-import { VideoDataAndPlaylist } from "../util/youtubeApi";
-import { formatDate, formatNumber, formatSecond } from "../util/stringUtil";
+import { VideoDataAndPlaylist } from "../../util/youtubeApi";
+import { formatDate, formatNumber, formatSecond } from "../../util/stringUtil";
 export default Vue.extend({
   props: {
     data: Object as PropType<VideoDataAndPlaylist & { sortValue: string, sortName: string }>
