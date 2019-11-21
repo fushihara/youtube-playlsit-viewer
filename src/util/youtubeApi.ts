@@ -1,41 +1,34 @@
 import { LocalStorageUtil } from "./localStorageUtil";
 import { formatDate } from "./stringUtil";
-export function applySort(videoItemsRaw:VideoDataAndPlaylist[],sortType:SortType):VideoDataAndPlaylist[]{
+export function applySort(videoItemsRaw:VideoDataAndPlaylist[],sortType:SortType,enableUserGroup:boolean):VideoDataAndPlaylist[]{
   const sortData = videoItemsRaw.map(a => {
     let sortValueNum: number | null = null;
-    let sortName = "";
     switch (sortType) {
       case "number-up":
       case "number-down":
         sortValueNum = a.playlistPosition;
         sortValueNum = a.playlistPosition;
-        sortName = "お気に入り登録";
         break;
       case "live-start-up":
       case "live-start-down":
         if (a.liveStreaming && (a.liveStreaming.type == "now" || a.liveStreaming.type == "ended")) {
           sortValueNum = new Date(a.liveStreaming.actualStartTime).getTime();
-          sortName = "配信開始";
         }
         break;
       case "pv-up":
       case "pv-down":
         if (a.liveStreaming == null || a.liveStreaming.type == "ended") {
           sortValueNum = a.viewCount;
-          sortName = "PV";
         }
         break;
       case "post-up":
       case "post-down":
         sortValueNum = new Date(a.publishDate).getTime();
-        sortName = "動画投稿";
         break;
     }
     return {
       ...a,
-      sortValue: formatDate(a.playlistRegistrationDate),
       sortValueNum,
-      sortName
     }
   }).filter(a => {
     return a.sortValueNum !== null;

@@ -82,7 +82,7 @@ export default Vue.extend({
       });
     },
     applySort(): void {
-      this.videoItemsSolid = applySort(this.videoItemsRaw, this.sortType);
+      this.videoItemsSolid = applySort(this.videoItemsRaw, this.sortType,this.enableUserGroup);
     },
     getVideoList(allGet: boolean): void {
       const targetPlaylistId = this.activePlaylist!.id;
