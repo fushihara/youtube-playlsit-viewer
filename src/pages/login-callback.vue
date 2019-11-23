@@ -40,7 +40,7 @@ export default Vue.extend({
       "p_static": process.static,
     });
     return {
-      redirectUrl: new URL("/login-callback", document.location.href)
+      redirectUrl: new URL("login-callback",new URL(context.base,document.location.href)).href
     };
   },
   methods: {
