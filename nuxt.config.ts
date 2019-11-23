@@ -3,7 +3,7 @@
 
 export default {
   router: {
-    base: process.env.GITHUB_REPOSITORY || "",
+    base: process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.replace(/^.+?\//, "")}/` : "",
     middleware: ["middleware-test-router"],
   },
   generate: {
