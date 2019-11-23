@@ -23,42 +23,7 @@ export function updateToken() {
     });
   });
 }
-export type VideoDataAndPlaylist = VideoData & {
-  playlistPosition: number,
-  playlistRegistrationDate: Date
-}
-type VideoData = {
-  videoId: string,
-  title: string,
-  description: string,
-  durationSec: number,
-  channelId: string,
-  channelTitle: string,
-  tags: string[],
-  thumbnail: string,
-  publishDate: Date,
-  liveStreaming: LiveStreamingBefore | LiveStreamingNow | LiveStreamingEnded | null,
-  commentCount: number,
-  favoriteCount: number,
-  viewCount: number,
-  likeCount: number,
-  dislikeCount: number
-}
-type LiveStreamingBefore = { // 配信前
-  type: "before",
-  scheduledStartTime: Date
-};
-type LiveStreamingNow = { //配信中
-  type: "now",
-  actualStartTime: Date,
-  scheduledStartTime: Date,
-  concurrentViewers: number
-};
-type LiveStreamingEnded = { // 配信終了
-  type: "ended",
-  actualStartTime: Date,
-  actualEndTime: Date
-};
+
 export async function getPlayList(axios: any): Promise<{ id: string, title: string, itemCount: number }[]> {
   const url = "https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&mine=true&maxResults=50";
   return axios.$get(url).then((a: any) => {

@@ -1,7 +1,12 @@
 <template>
   <div style="display:flex;" class="top">
-    <a style="display:flex;width:100%;">
+    <a style="display:flex;width:100%;" v-bind:style="{backgroundColor:data.backgroundColor}">
       <div class="thumbnail">
+        <a
+          class="header"
+          v-if="data.header !== undefined "
+          v-bind:href="data.header.link"
+        >{{data.header.label}}</a>
         <div class="title">{{videoTitle}}</div>
         <a class="channel" v-bind:href="channelUrl">{{channelTitle}}</a>
         <a v-bind:href="aLink" style="position: relative;">
@@ -40,13 +45,13 @@
 <script lang="ts">
 
 import Vue, { PropType } from "vue";
-import { VideoDataAndPlaylist } from "../../util/youtubeApi";
 import { formatDate, formatNumber, formatSecond } from "../../util/stringUtil";
 export default Vue.extend({
   props: {
-    data: Object as PropType<VideoDataAndPlaylist & { sortValue: string, sortName: string }>
+    data: Object as PropType<MainListItemVideo>
   },
   data() {
+    console.log(`aaa`, this.data.backgroundColor)
     let durationStr = "";
     let liveEndDateStr = "";
     let liveStartDateStr = "";
@@ -108,18 +113,23 @@ export default Vue.extend({
   flex-direction: column;
   display: flex;
   align-items: baseline;
+  > .header {
+    width: 100%;
+    border-bottom: solid 1px black;
+    font-size: 10px;
+  }
   > .title {
     color: black;
-    font-size:10px;
+    font-size: 10px;
   }
   > .channel {
     color: black;
     text-align: left;
-    font-size:10px;
+    font-size: 10px;
   }
   > .meta {
     color: black;
-    font-size:10px;
+    font-size: 10px;
   }
   > a {
     > div {

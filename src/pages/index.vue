@@ -26,7 +26,9 @@
       <button v-on:click="changeSort('pv-down')">再生数少ない順</button>
     </div>
     <div class="videoList-solid" v-on:wheel="listWheelEvent">
-      <video-element v-for="data in videoItemsSolid" v-bind:key="data.videoId" v-bind:data="data"></video-element>
+      <div v-for="data in videoItemsSolid" v-bind:key="data.videoId">
+        <video-element v-bind:data="data"></video-element>
+      </div>
     </div>
   </div>
 </template>
@@ -34,7 +36,7 @@
 <script lang="ts">
 import Vue from "vue";
 import VideoElement from "../components/listItem/videoCompact.vue";
-import { getPlayList, getPlaylistVideos, VideoDataAndPlaylist } from "../util/youtubeApi";
+import { getPlayList, getPlaylistVideos } from "../util/youtubeApi";
 import { applySort } from "../util/youtubeApiSort";
 
 import { formatDate, formatNumber, formatSecond } from "../util/stringUtil";
@@ -47,7 +49,7 @@ export default Vue.extend({
       playlistList: [] as { id: string, title: string, itemCount: number }[],
       activePlaylist: null as { id: string, title: string, itemCount: number } | null,
       videoItemsRaw: [] as VideoDataAndPlaylist[],
-      videoItemsSolid: [] as VideoDataAndPlaylist[],
+      videoItemsSolid: [] as MainListItemVideo[],
       enableUserGroup: false as boolean,
       sortType: "number-up" as SortType
     }
@@ -103,22 +105,19 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
 }
-.videoList-solid,
-.videoList-group {
+.videoList-solid {
   overflow: scroll;
   flex: 1 1 0;
-}
-.videoList-solid > * {
-  border: solid 1px black;
-  flex: 1 1 0;
-}
-.videoList-solid {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   > * {
-    width: 322px;
+    padding: 2px;
+    width: 326px;
     flex: 0 0 auto;
+    > * {
+      border: solid 1px #888;
+    }
   }
 }
 </style>

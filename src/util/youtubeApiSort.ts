@@ -1,6 +1,5 @@
-import { VideoDataAndPlaylist } from "./youtubeApi";
 
-export function applySort(videoItemsRaw:VideoDataAndPlaylist[],sortType:SortType,enableUserGroup:boolean):VideoDataAndPlaylist[]{
+export function applySort(videoItemsRaw: VideoDataAndPlaylist[], sortType: SortType, enableUserGroup: boolean): MainListItemVideo[] {
   const sortData = videoItemsRaw.map(a => {
     let sortValueNum: number | null = null;
     switch (sortType) {
@@ -61,6 +60,52 @@ export function applySort(videoItemsRaw:VideoDataAndPlaylist[],sortType:SortType
     } else {
       return b.sortValueNum - a.sortValueNum;
     }
+  }).map((now, index) => {
+    const backgroundColors = ["white", "#DDD"];
+    return {
+      ...now,
+      backgroundColor: backgroundColors[index % backgroundColors.length]
+    }
   });
+  if (enableUserGroup) {
+    return groupByUser(sortData);
+  }
   return sortData;
+}
+function groupByUser(videoList: MainListItemVideo[]): MainListItemVideo[] {
+  const list: {
+    channelName: string,
+    channelId: string,
+    videos: MainListItemVideo[]
+  }[] = [];
+  for (let video of videoList) {
+    const listData = list.find(a => a.channelId == video.channelId);
+    if (listData === undefined) {
+      list.push({
+        channelId: video.channelId,
+        channelName: video.channelTitle,
+        videos: [video]
+      });
+    } else {
+      listData.videos.push(video);
+    }
+  }
+  const result: MainListItemVideo[] = [];
+  const backgroundColors = ["white", "#DDD"];
+  for (let data of list) {
+    const backgroundColor = backgroundColors[list.indexOf(data) % backgroundColors.length];
+    let header: { label: string, link: string } | undefined = {
+      label: data.channelName,
+      link: `https://www.youtube.com/channel/${data.channelId}`
+    };
+    for (let video of data.videos) {
+      video.backgroundColor = backgroundColor;
+      result.push({
+        header,
+        ...video
+      });
+      header = undefined;
+    }
+  }
+  return result;
 }

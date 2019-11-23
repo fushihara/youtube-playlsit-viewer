@@ -1,7 +1,7 @@
 <template>
   <div style="display:flex;" class="top">
-    <vue-video v-if="data.type=='video'" v-bind="data"></vue-video>
-    <vue-header v-else-if="data.type=='header'" v-bind="data"></vue-header>
+    <vue-video v-bind:data="data"></vue-video>
+    <!-- <vue-header v-else-if="data.type=='header'" v-bind:data="data"></vue-header> -->
   </div>
 </template>
 
@@ -9,19 +9,16 @@
 
 import Vue, { PropType } from "vue";
 import VueHeader from "./header.vue";
-import VueVideo from "./video.vue";
-import { VideoDataAndPlaylist } from "./../../util/youtubeApi";
+import VueVideo from "./videoCompact.vue";
 export default Vue.extend({
   components: {
-    VueHeader,VueVideo
+    VueHeader, VueVideo
   },
   props: {
-    data: Object as PropType<(VideoDataAndPlaylist & { sortValue: string, sortName: string, type: "video" }) | { type: "header", label: string, link: string }>
+    data: Object as PropType<MainListItemVideo>
   },
   data() {
-    return {
-      data: this.data
-    };
+    return {};
   },
 });
 </script>
