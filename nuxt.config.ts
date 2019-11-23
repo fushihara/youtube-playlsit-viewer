@@ -12,7 +12,9 @@ export default {
     dir: "dist-generate"
   },
   server: {
-    host: 'localhost', // デフォルト: localhost
+    port: 57138,
+    timing: true,
+    host: 'localhost',
   },
   mode: 'spa',
   srcDir: "./src",
